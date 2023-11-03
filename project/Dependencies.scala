@@ -12,6 +12,7 @@ object Dependencies {
 
     val kindProjector       = "0.10.3"
     val logback             = "1.2.3"
+    val log4cats            = "1.3.1"
     val scalaCheck          = "1.15.3"
     val scalaTest           = "3.2.7"
     val catsScalaCheck      = "0.3.0"
@@ -24,6 +25,7 @@ object Dependencies {
     lazy val cats                = "org.typelevel"         %% "cats-core"                  % Versions.cats
     lazy val catsEffect          = "org.typelevel"         %% "cats-effect"                % Versions.catsEffect
     lazy val fs2                 = "co.fs2"                %% "fs2-core"                   % Versions.fs2
+    lazy val log4catsSlf4j       = "org.typelevel"         %% "log4cats-slf4j"             % Versions.log4cats
 
     lazy val http4sDsl           = http4s("http4s-dsl")
     lazy val http4sServer        = http4s("http4s-blaze-server")
