@@ -16,7 +16,10 @@ class RateCache[F[_] : Logger : Timer : Concurrent](service: RatesClient[F], one
   private val supportedPairs = Currency.values.flatMap(from => Currency.values.collect { case to if from != to => Rate.Pair(from, to) })
   private val cachedRatesMap: Ref[F, Map[Currency, Map[Currency, Rate]]] = Ref.unsafe(Map.empty)
 
-  override def init(): F[Either[Error, Unit]] = initializeCacheUpdate(oneFameConfig.cacheUpdateInterval)
+  override def init(): F[Either[Error, Unit]] = {
+    Logger[F].info("Initializing RateCache")
+    initializeCacheUpdate(oneFameConfig.cacheUpdateInterval)
+  }
 
   override def get(pairs: List[Rate.Pair]): F[Either[Error, List[Rate]]] = {
     cachedRatesMap.get.map { cache =>

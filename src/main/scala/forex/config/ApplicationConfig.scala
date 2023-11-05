@@ -14,8 +14,14 @@ case class HttpConfig(
 )
 
 case class OneFrameConfig(
+  http: OneFrameHttpConfig,
+  cacheUpdateInterval: FiniteDuration,
+  retryCount: Int,
+  retryDelay: FiniteDuration
+)
+
+case class OneFrameHttpConfig(
   host: String,
   port: Int,
-  token: String,
-  cacheUpdateInterval: FiniteDuration
+  token: String
 )

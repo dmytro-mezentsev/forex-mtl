@@ -13,7 +13,7 @@ object Dependencies {
 
     val kindProjector       = "0.10.3"
     val logback             = "1.2.3"
-    val log4cats            = "1.3.1"
+    val log4cats            = "1.1.1"
     val scalaCheck          = "1.15.3"
     val scalaTest           = "3.2.7"
     val catsScalaCheck      = "0.3.0"

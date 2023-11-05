@@ -2,7 +2,7 @@ package forex.services.cache.interpreters
 
 import cats.effect.{ContextShift, IO, Timer}
 import cats.implicits.{catsSyntaxApplicativeId, catsSyntaxEitherId}
-import forex.config.OneFrameConfig
+import forex.config.{OneFrameConfig, OneFrameHttpConfig}
 import forex.domain._
 import forex.services.RatesClient
 import forex.services.rates.errors
@@ -32,7 +32,7 @@ class RateCacheSpec extends AnyFlatSpec with Matchers {
   }
 
   "RateCache" should "initialize the cache" in {
-    val oneFrameConfig = OneFrameConfig("localhost", 8080, "token", 5.seconds)
+    val oneFrameConfig = OneFrameConfig(OneFrameHttpConfig("localhost", 8080, "your-token"), 5.minutes, 2, 30.seconds)
     val rateCache = new RateCache[IO](mockRatesClient, oneFrameConfig)
     val result = rateCache.init().unsafeRunSync()
 
@@ -40,5 +40,4 @@ class RateCacheSpec extends AnyFlatSpec with Matchers {
     rateCache.get(List(pairUsdJpy)).unsafeRunSync() shouldBe Right(List(rateUsdJpy))
     rateCache.get(List(pairUsdJpy, pairEurCad, pairJpyAud)).unsafeRunSync() shouldBe Right(List(rateUsdJpy, rateEurCad, rateJpyAud))
   }
-
 }

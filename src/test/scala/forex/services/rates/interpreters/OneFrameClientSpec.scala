@@ -1,7 +1,7 @@
 package forex.services.rates.interpreters
 
-import cats.effect.IO
-import forex.config.OneFrameConfig
+import cats.effect.{IO, Timer}
+import forex.config.{OneFrameConfig, OneFrameHttpConfig}
 import forex.domain.{Currency, Price, Rate, Timestamp}
 import forex.services.rates.errors.Error.OneFrameLookupFailed
 import io.circe.{Json, jawn}
@@ -12,9 +12,12 @@ import org.http4s.dsl.Http4sDsl
 import org.http4s.{Header, HttpApp, Response}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.typelevel.log4cats.slf4j.Slf4jLogger
 import scala.concurrent.duration.DurationInt
 
 class OneFrameClientSpec extends AnyFlatSpec with Matchers with Http4sDsl[IO] {
+  implicit val timer: Timer[IO] = IO.timer(scala.concurrent.ExecutionContext.Implicits.global)
+  implicit val logger = Slf4jLogger.getLogger[IO]
 
   object PairQueryParameter extends QueryParamDecoderMatcher[String]("pair")
 
@@ -27,11 +30,9 @@ class OneFrameClientSpec extends AnyFlatSpec with Matchers with Http4sDsl[IO] {
       } else {
         IO.delay(Response[IO](BadRequest).withHeaders(Header("Content-Type", "application/json")))
       }
-
   })
 
-  val oneFrameConfig = OneFrameConfig("localhost", 8080, "your-token", 5.minutes)
-
+  val oneFrameConfig = OneFrameConfig(OneFrameHttpConfig("localhost", 8080, "your-token"), 5.minutes, 2, 1.seconds)
 
   "OneFrameClient" should "return a list of rates when the HTTP request is successful" in {
     val client = new OneFrameClient[IO](oneFrameConfig, mockHttpClient)
@@ -57,5 +58,4 @@ class OneFrameClientSpec extends AnyFlatSpec with Matchers with Http4sDsl[IO] {
 
     result shouldBe expectedError
   }
-
 }
