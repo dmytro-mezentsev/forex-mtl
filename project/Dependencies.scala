@@ -16,7 +16,6 @@ object Dependencies {
     val log4cats            = "1.3.1"
     val scalaCheck          = "1.15.3"
     val scalaTest           = "3.2.7"
-    val mockito             = "5.1.0"
     val catsScalaCheck      = "0.3.0"
   }
 
@@ -38,7 +37,7 @@ object Dependencies {
     lazy val circeGenericExt     = circe("circe-generic-extras")
     lazy val circeParser         = circe("circe-parser")
     lazy val pureConfig          = "com.github.pureconfig" %% "pureconfig"                 % Versions.pureConfig
-    lazy val enumeratum          = "com.beachape"          %% "enumeratum"                          % Versions.enumeratumVersion
+    lazy val enumeratum          = "com.beachape"          %% "enumeratum"                 % Versions.enumeratumVersion
 
     // Compiler plugins
     lazy val kindProjector       = "org.typelevel"         %% "kind-projector"             % Versions.kindProjector
@@ -48,7 +47,6 @@ object Dependencies {
 
     // Test
     lazy val scalaTest           = "org.scalatest"         %% "scalatest"                  % Versions.scalaTest
-    lazy val mockito             = "org.mockito"           % "mockito-core"                % Versions.mockito
     lazy val scalaCheck          = "org.scalacheck"        %% "scalacheck"                 % Versions.scalaCheck
     lazy val catsScalaCheck      = "io.chrisdavenport"     %% "cats-scalacheck"            % Versions.catsScalaCheck
   }
