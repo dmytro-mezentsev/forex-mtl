@@ -5,11 +5,12 @@ import forex.config._
 import fs2.Stream
 import org.http4s.client.blaze.BlazeClientBuilder
 import org.http4s.server.blaze.BlazeServerBuilder
+import org.typelevel.log4cats.Logger
 import org.typelevel.log4cats.slf4j.Slf4jLogger
 import scala.concurrent.ExecutionContext
 
 object Main extends IOApp {
-  private val logger = Slf4jLogger.getLogger[IO]
+  implicit val logger = Slf4jLogger.getLogger[IO]
 
   override def run(args: List[String]): IO[ExitCode] = {
 
@@ -24,13 +25,14 @@ object Main extends IOApp {
 
 }
 
-class Application[F[_] : ConcurrentEffect : Timer] {
+class Application[F[_] : Logger : ConcurrentEffect : Timer] {
 
   def stream(ec: ExecutionContext): Stream[F, Unit] =
     for {
       config <- Config.stream("app")
       httpClients <- BlazeClientBuilder[F](ec).stream
       module = new Module[F](config, httpClients)
+      _ <- Stream.eval(module.initCache)
       _ <- BlazeServerBuilder[F](ec)
         .bindHttp(config.http.port, config.http.host)
         .withHttpApp(module.httpApp)

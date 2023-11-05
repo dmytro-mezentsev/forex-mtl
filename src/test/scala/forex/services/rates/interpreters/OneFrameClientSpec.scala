@@ -12,6 +12,7 @@ import org.http4s.dsl.Http4sDsl
 import org.http4s.{Header, HttpApp, Response}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import scala.concurrent.duration.DurationInt
 
 class OneFrameClientSpec extends AnyFlatSpec with Matchers with Http4sDsl[IO] {
 
@@ -29,7 +30,7 @@ class OneFrameClientSpec extends AnyFlatSpec with Matchers with Http4sDsl[IO] {
 
   })
 
-  val oneFrameConfig = OneFrameConfig("localhost", 8080, "your-token")
+  val oneFrameConfig = OneFrameConfig("localhost", 8080, "your-token", 5.minutes)
 
 
   "OneFrameClient" should "return a list of rates when the HTTP request is successful" in {
